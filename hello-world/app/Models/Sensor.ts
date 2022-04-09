@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import mongoose, { Schema } from 'mongoose';
 
-const sch_VENTA=new Schema({
+const schSensor=new Schema({
   idSensor: Number,
   idUsuario: Number,
   NombreSensor: String,
@@ -12,7 +12,7 @@ const sch_VENTA=new Schema({
   Fechadecreacion: DateTime,
   Fechadeactualisacion: DateTime
 });
-export default sch_VENTA;
+export default schSensor;
   /*
   self.idSensor = 0
   self.idUsuario = 0
