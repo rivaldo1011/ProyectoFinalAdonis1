@@ -15,3 +15,6 @@ Route.post('login', async ({ auth, request, response }) => {
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+Route.post('Login','AuthController.Login')
+Route.post('Register','AuthController.register')
