@@ -9,8 +9,8 @@ const schSensor=new Schema({
   Estado: String,
   GPIO: Array,
   IMG: String,
-  Fechadecreacion: DateTime,
-  Fechadeactualisacion: DateTime
+  Fechadecreacion: Date,
+  Fechadeactualisacion: Date
 });
 export default schSensor;
   /*

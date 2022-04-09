@@ -18,3 +18,6 @@ Route.get('/', async () => {
 //LOGIN
   Route.post('Login','AuthController.Login')
   Route.post('Register','AuthController.register')
+//SENSORES 
+  Route.get('mostrarSensores','SensorsController.getSensores')
+  Route.post('crearSensores','SensorsController.crearSensor')

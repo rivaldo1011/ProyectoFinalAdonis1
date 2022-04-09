@@ -4,10 +4,11 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import auth from 'App/Models/auth'
 
 export default class AuthController {
-  public async Login({ request, auth }: HttpContextContract) {
+  public async Login({ request, auth,response }: HttpContextContract) {
     const email = request.input('email')
     const password = request.input('password')
-    const token = await auth.attempt(email, password)
+    const token = await auth.use('api').attempt(email, password)
+    //response.
     return token.toJSON()
   }
   public async register({ request, response }: HttpContextContract) {
