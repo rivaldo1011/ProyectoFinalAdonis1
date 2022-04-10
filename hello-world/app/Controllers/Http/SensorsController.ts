@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schSensor from 'App/Models/Sensor'
-import { DateTime } from 'luxon'
+import { DateTime, Zone } from 'luxon'
 export default class SensorsController {
   URL = Env.get('MONGO_URL')
   //EXTRAS
@@ -38,10 +38,14 @@ export default class SensorsController {
     const con = mongoose.createConnection(this.URL, {
       maxIdleTimeMS: 6000,
     })
+    //var preGPIO={datos.GPIO}
+    //fgpio.forEach(element => {
+    //   preGPIO.push(element)
+    //});
+
     const preb = con.model('sensores', schSensor)
     let idventa = await this.autoincrement()
     const id = (await idventa) + 1
-    preGPIO:Object=datos.GPIO
     preb
       .insertMany({
         idSensor: id,
@@ -49,7 +53,7 @@ export default class SensorsController {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
-        GPIO: preGPIO,
+        GPIO: datos.GPIO,
         IMG: datos.IMG,
         Fechadecreacion: Date.now(),
         Fechadeactualisacion: '',
@@ -60,6 +64,7 @@ export default class SensorsController {
       .catch((err) => {
         console.log(err)
       })
+    return { hola: 'xd' }
   }
   //mostrar
   public async getSensores() {
@@ -76,7 +81,7 @@ export default class SensorsController {
     return buscar
   }
   //editar
-  public async updateSensores({request}: HttpContextContract) {
+  public async updateSensores({ request }: HttpContextContract) {
     const datos = request.all()
     const con = mongoose.createConnection(this.URL, {
       maxIdleTimeMS: 6000,
@@ -101,5 +106,12 @@ export default class SensorsController {
       .catch((err) => {
         console.log(err)
       })
+  }
+  //pruebas
+  public async pruebaslista({ request }: HttpContextContract) {
+    const todo = request.all()
+    var s = {}
+    s = todo.GPIO.toJSON()
+    console.log(s)
   }
 }
