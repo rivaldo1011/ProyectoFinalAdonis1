@@ -7,7 +7,7 @@ const schSensor=new Schema({
   NombreSensor: String,
   Descripcion: String,
   Estado: String,
-  GPIO: Array,
+  GPIO:{},
   IMG: String,
   Fechadecreacion: Date,
   Fechadeactualisacion: Date
