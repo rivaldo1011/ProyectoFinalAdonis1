@@ -21,3 +21,7 @@ Route.get('/', async () => {
 //SENSORES 
   Route.get('mostrarSensores','SensorsController.getSensores')
   Route.post('crearSensores','SensorsController.crearSensor')
+
+  //HISTORIAL
+  Route.get('mostrarHistorial','HistorialsController.getHistorial')
+  Route.post('crearHistorial','HistorialsController.Historial')
