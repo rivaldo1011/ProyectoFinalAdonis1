@@ -12,20 +12,17 @@ Route.group(() => {
 //LOGIN
   Route.post('Login','AuthController.Login')
   Route.post('Register','AuthController.register')
-<<<<<<< Updated upstream
 //SENSORES 
   Route.get('mostrarSensores','SensorsController.getSensores')
   Route.post('crearSensores','SensorsController.crearSensor')
-
+  Route.put('updateSensores','SensorsController.updateSensores')
+  Route.delete('eliminarSensores','SensorsController.deleteSensor')
   //HISTORIAL
   Route.get('mostrarHistorial','HistorialsController.getHistorial')
   Route.post('crearHistorial','HistorialsController.Historial')
-  Route.put('updateSensores','SensorsController.updateSensores')
-  Route.delete('eliminarSensores','SensorsController.deleteSensor')
-=======
-
   //Historial
   Route.get('Conexion','HistorialsController.mostrarHistorial')
   Route.put('InsertarHistorial','HistorialsController.store')
   Route.get('MostrarHistorial','HistorialsController.mostar')
->>>>>>> Stashed changes
+  //pruebas historial autoincrement
+  Route.get('autoincrement','HistorialsController.autoincrement')
