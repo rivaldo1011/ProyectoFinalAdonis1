@@ -90,14 +90,13 @@ export default class SensorsController {
     let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
     const preb = con.model('sensores', schSensor)
     preb
-      .updateOne({
-        idSensor: datos.id,
-        idUsuario: datos.usuario,
-        NombreSensor: datos.nombresensor,
-        Descripcion: datos.descripcion,
-        Estado: datos.estado,
-        GPIO: datos.puertosGPIO,
-        IMG: datos.URLimagen,
+      .updateOne({idSensor: datos.idSensor},{
+        idUsuario: datos.idUsuario,
+        NombreSensor: datos.NombreSensor,
+        Descripcion: datos.Descripcion,
+        Estado: datos.Estado,
+        GPIO: datos.GPIO,
+        IMG: datos.IMG,
         Fechadeactualisacion: Date.now(),
       })
       .then((data) => {
