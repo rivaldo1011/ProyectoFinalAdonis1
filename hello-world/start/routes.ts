@@ -22,4 +22,4 @@ Route.get('/', async () => {
   Route.get('mostrarSensores','SensorsController.getSensores')
   Route.post('crearSensores','SensorsController.crearSensor')
   Route.put('updateSensores','SensorsController.updateSensores')
-  Route.delete('eliminarSensores','SensorsController.deleteSensor')
+  Route.delete('eliminarSensores','SensorsController.deleteSensor')📥
