@@ -90,7 +90,7 @@ export default class SensorsController {
     let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
     const preb = con.model('sensores', schSensor)
     preb
-      .updateOne({idSensor: datos.idSensor},{
+      .updateOne({ idSensor: datos.idSensor }, {
         idUsuario: datos.idUsuario,
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
@@ -99,6 +99,22 @@ export default class SensorsController {
         IMG: datos.IMG,
         Fechadeactualisacion: Date.now(),
       })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  //eliminar
+  public async deleteSensor({ request }: HttpContextContract) {
+    const datos = request.all()
+    const con = mongoose.createConnection(this.URL, {
+      maxIdleTimeMS: 6000,
+    })
+    const preb = con.model('sensores', schSensor)
+    preb
+      .deleteOne({ idSensor: datos.idSensor })
       .then((data) => {
         console.log(data)
       })
