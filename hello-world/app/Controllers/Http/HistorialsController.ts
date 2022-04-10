@@ -1,5 +1,6 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+<<<<<<< Updated upstream
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schHistorial from 'App/Models/Historial'
@@ -95,4 +96,62 @@ public async autoincrement() {
         console.log(err)
       })
   }
+=======
+import Historial from 'App/Models/Historial';
+import mongoose from 'mongoose'
+
+export default class MostrarDatosController {
+
+    public async mostrarHistorial()
+    {
+        const conn = await mongoose.createConnection('mongodb+srv://root:ZXCVzxcv1234@sandbox1.1jic6.mongodb.net/proyecto').
+        asPromise();
+        try {
+            return('Se hizo la conexion correctamente')
+            conn.readyState;
+        } catch (error) {
+            return('No se pudo hacer la conexion')
+        }
+    }
+
+    public async store({request}: HttpContextContract)
+    {
+        const datos = request.all()
+        const con = mongoose.createConnection(
+          'mongodb+srv://root:AWDSawds8713@sandbox1.1jic6.mongodb.net/practicas_web',
+          {
+            maxIdleTimeMS: 6000,
+          }
+        )
+        const preb = con.model('historial', Historial)
+        const id=await idSensor+1;
+        preb.insertMany
+        ({
+            idSensor: id,
+            valor:datos.valor
+
+        }).then((data) => {
+      console.log(data)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+    }
+
+    public async mostar(usuario) {
+        const con = mongoose.createConnection(
+          'mongodb+srv://root:ZXCVzxcv1234@sandbox1.1jic6.mongodb.net/proyecto'
+        )
+        const preb = con.model('historial', Historial)
+        const buscar = preb
+          .find({idUsuario:usuario})
+          .then((data) => {
+            console.log(data)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        return buscar
+      }
+>>>>>>> Stashed changes
 }
