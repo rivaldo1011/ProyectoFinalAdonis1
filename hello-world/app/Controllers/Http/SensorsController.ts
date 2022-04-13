@@ -67,18 +67,18 @@ export default class SensorsController {
     return { hola: 'xd' }
   }
   //mostrar
-  public async getSensores() {
+  public async getSensores({response}:HttpContextContract) {
     const con = mongoose.createConnection(this.URL)
     const preb = con.model('sensores', schSensor)
-    const buscar = preb
+    await preb
       .find({})
       .then((data) => {
-        console.log(data)
+        response =data
       })
       .catch((err) => {
-        console.log(err)
+        return err
       })
-    return buscar
+    return response
   }
   //editar
   public async updateSensores({ request }: HttpContextContract) {

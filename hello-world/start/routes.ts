@@ -10,6 +10,7 @@ Route.group(() => {
   })
 
   //AUTH-SENSORES 
+  Route.get('revisarToken', 'SensorsController.VerificarToken')
   Route.get('smostrarSensores', 'SensorsController.getSensores')
   Route.post('screarSensores', 'SensorsController.crearSensor')
   Route.put('supdateSensores', 'SensorsController.updateSensores')
