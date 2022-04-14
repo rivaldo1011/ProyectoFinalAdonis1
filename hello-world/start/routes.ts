@@ -43,3 +43,7 @@ Route.group(() => {
   Route.post('crearHistorial', 'HistorialsController.crearHistorial')
   Route.post('updateHistorial', 'HistorialsController.updateHistorial')
   Route.post('deleteHistorial', 'HistorialsController.deleteSensor')
+
+
+  
+  Route.get('revisarToken', 'AuthController.VerificarToken')
