@@ -3,10 +3,9 @@ import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schSensor from 'App/Models/Sensor'
 //import { DateTime, Zone } from 'luxon'
-let URL = Env.get('ATLAS_MONGO_URL');
+let URL = Env.get('MONGO_URL');
 let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
-  URL = Env.get('ATLAS_MONGO_URL')
   //EXTRAS
   public async autoincrement() {
     try {
