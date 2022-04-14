@@ -44,6 +44,6 @@ export default class AuthController {
   public async getUser({ auth }) {
     await auth.use('api').authenticate()
     const user = auth.use('api').user.$attributes
-    return user.toJSON()
+    return user
   }
 }

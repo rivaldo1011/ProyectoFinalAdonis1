@@ -67,7 +67,7 @@ export default class HistorialsController {
   }
   //editar
   public async updateHistorial({ params,request,response }: HttpContextContract) {
-    const id = params.all()
+    const id = params.id
     const datos = request.all()
     //let date = new Date()
     //let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]

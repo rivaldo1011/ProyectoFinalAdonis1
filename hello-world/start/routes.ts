@@ -16,14 +16,14 @@ Route.group(() => {
 
   Route.get('smostrarSensores', 'SensorsController.getSensores')
   Route.post('screarSensores', 'SensorsController.crearSensor')
-  Route.put('supdateSensores', 'SensorsController.updateSensores')
-  Route.delete('seliminarSensores', 'SensorsController.deleteSensor')
+  Route.put('supdateSensores/:id', 'SensorsController.updateSensores')
+  Route.delete('seliminarSensores/:id', 'SensorsController.deleteSensor')
 
   //AUTH-HISTORIAL
   Route.get('smostrarHistorial', 'HistorialsController.getHistorial')
   Route.post('screarHistorial', 'HistorialsController.crearHistorial')
-  Route.post('supdateHistorial', 'HistorialsController.updateHistorial')
-  Route.post('sdeleteHistorial', 'HistorialsController.deleteSensor')
+  Route.post('supdateHistorial/:id', 'HistorialsController.updateHistorial')
+  Route.post('sdeleteHistorial/:id', 'HistorialsController.deleteSensor')
   //AUTH-Historial
   Route.get('sConexion', 'HistorialsController.mostrarHistorial')
   Route.put('sInsertarHistorial', 'HistorialsController.store')
@@ -36,13 +36,13 @@ Route.group(() => {
 //SENSORES 
   Route.get('mostrarSensores', 'SensorsController.getSensores')
   Route.post('crearSensores', 'SensorsController.crearSensor')
-  Route.put('updateSensores', 'SensorsController.updateSensores')
-  Route.delete('eliminarSensores', 'SensorsController.deleteSensor')
+  Route.put('updateSensores/:id', 'SensorsController.updateSensores')
+  Route.delete('eliminarSensores/:id', 'SensorsController.deleteSensor')
 //HISTORIAL
   Route.get('mostrarHistorial', 'HistorialsController.getHistorial')
   Route.post('crearHistorial', 'HistorialsController.crearHistorial')
-  Route.post('updateHistorial', 'HistorialsController.updateHistorial')
-  Route.post('deleteHistorial', 'HistorialsController.deleteSensor')
+  Route.post('updateHistorial/:id', 'HistorialsController.updateHistorial')
+  Route.post('deleteHistorial/:id', 'HistorialsController.deleteSensor')
 
 
   

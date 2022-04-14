@@ -3,10 +3,10 @@ import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schSensor from 'App/Models/Sensor'
 //import { DateTime, Zone } from 'luxon'
-let URL = Env.get('MONGO_URL');
+let URL = Env.get('ATLAS_MONGO_URL');
 let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
-  URL = Env.get('MONGO_URL')
+  URL = Env.get('ATLAS_MONGO_URL')
   //EXTRAS
   public async autoincrement() {
     try {
@@ -64,21 +64,23 @@ export default class SensorsController {
       })
   }
   //mostrar
-  public async getSensores({ request }: HttpContextContract) {
+  public async getSensores({ request, response }: HttpContextContract) {
     let datos = request.all()
+    let resp:any
     const preb = (await mongo).model('sensores', schSensor)
     await preb
       .find({ 'idUsuario': datos.idUsuario })
       .then((data) => {
-        return data
+        resp= data
       })
       .catch((err) => {
         return err
       })
+      return resp
   }
   //editar
   public async updateSensores({params,request,response }: HttpContextContract) {
-    const id = params.all()
+    const id = params.id
     const datos = request.all()
     const preb = (await mongo).model('sensores', schSensor)
     preb
