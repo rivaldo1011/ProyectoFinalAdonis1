@@ -22,7 +22,7 @@ export default class AuthController {
     })
     const data = await request.validate({ schema: validations })
     const user = await auth.create(data)
-    return response.created(user)
+    return response.created("usuario creado")
   }
   public async Logout({ auth, response }) {
     try {
@@ -44,6 +44,6 @@ export default class AuthController {
   public async getUser({ auth }) {
     await auth.use('api').authenticate()
     const user = auth.use('api').user.$attributes
-    return user
+    return user.toJSON()
   }
 }

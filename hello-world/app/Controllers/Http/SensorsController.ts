@@ -2,14 +2,15 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schSensor from 'App/Models/Sensor'
-import { DateTime, Zone } from 'luxon'
+//import { DateTime, Zone } from 'luxon'
+let URL = Env.get('MONGO_URL');
+let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
   URL = Env.get('MONGO_URL')
   //EXTRAS
   public async autoincrement() {
     try {
-      const con = mongoose.createConnection(this.URL)
-      const preb = con.model('sensores', schSensor)
+      const preb = (await mongo).model('sensores', schSensor)
       let s = await preb.aggregate([
         {
           $project: {
@@ -33,17 +34,13 @@ export default class SensorsController {
     }
   }
   //CREAR
-  public async crearSensor({ request }: HttpContextContract) {
+  public async crearSensor({ request, response }: HttpContextContract) {
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
     //var preGPIO={datos.GPIO}
     //fgpio.forEach(element => {
     //   preGPIO.push(element)
     //});
-
-    const preb = con.model('sensores', schSensor)
+    const preb = (await mongo).model('sensores', schSensor)
     let idventa = await this.autoincrement()
     const id = (await idventa) + 1
     preb
@@ -59,39 +56,33 @@ export default class SensorsController {
         Fechadeactualisacion: '',
       })
       .then((data) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    return { hola: 'xd' }
-  }
-  //mostrar
-  public async getSensores({response}:HttpContextContract) {
-    const con = mongoose.createConnection(this.URL)
-    const preb = con.model('sensores', schSensor)
-    await preb
-      .find({})
-      .then((data) => {
-        response =data
+        return response.created
+        //console.log(data)
       })
       .catch((err) => {
         return err
       })
-    return response
+  }
+  //mostrar
+  public async getSensores({ request }: HttpContextContract) {
+    let datos = request.all()
+    const preb = (await mongo).model('sensores', schSensor)
+    await preb
+      .find({ 'idUsuario': datos.idUsuario })
+      .then((data) => {
+        return data
+      })
+      .catch((err) => {
+        return err
+      })
   }
   //editar
-  public async updateSensores({ request }: HttpContextContract) {
+  public async updateSensores({params,request,response }: HttpContextContract) {
+    const id = params.all()
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
-    let date = new Date()
-    let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
-    const preb = con.model('sensores', schSensor)
+    const preb = (await mongo).model('sensores', schSensor)
     preb
-      .updateOne({ idSensor: datos.idSensor }, {
-        idUsuario: datos.idUsuario,
+      .updateOne({ 'idSensor': id.idSensor }, {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
@@ -100,26 +91,25 @@ export default class SensorsController {
         Fechadeactualisacion: Date.now(),
       })
       .then((data) => {
-        console.log(data)
+        //console.log(data)
+        return response.ok
       })
       .catch((err) => {
-        console.log(err)
+        return err
       })
   }
   //eliminar
-  public async deleteSensor({ request }: HttpContextContract) {
+  public async deleteSensor({ request,response }: HttpContextContract) {
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
-    const preb = con.model('sensores', schSensor)
+    const preb = (await mongo).model('sensores', schSensor)
     preb
       .deleteOne({ idSensor: datos.idSensor })
       .then((data) => {
-        console.log(data)
+        return response.finished
+        //console.log(data)
       })
       .catch((err) => {
-        console.log(err)
+        return err
       })
   }
   //pruebas
