@@ -35,7 +35,6 @@ export default class SensorsController {
   //CREAR
   public async crearSensor({ request, response }: HttpContextContract) {
     const datos = request.all()
-    var preGPIO={datos:datos.GPIO}
     const preb = (await mongo).model('sensores', schSensor)
     let idventa = await this.autoincrement()
     const id = (await idventa) + 1
@@ -46,7 +45,7 @@ export default class SensorsController {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
-        GPIO: preGPIO.datos,
+        GPIO: datos.GPIO,
         IMG: datos.IMG,
         Fechadecreacion: Date.now(),
         Fechadeactualisacion: '',
