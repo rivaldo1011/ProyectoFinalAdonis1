@@ -67,15 +67,15 @@ export default class HistorialsController {
   }
   //editar
   public async updateHistorial({ params,request,response }: HttpContextContract) {
-    const id = params.id
     const datos = request.all()
     //let date = new Date()
     //let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
     const preb = (await mongo).model('historialsensores', schHistorial)
+    
     preb
-      .updateOne({ 'idSensor': id.idSensor }, {
+      .updateOne({ id: params.id }, {
         idSensor: datos.idSensor,
-        Valor: datos.valor,
+        Valor: datos.Valor,
         Fechadeactualizacion: Date.now()
       })
       .then((data) => {
@@ -87,10 +87,10 @@ export default class HistorialsController {
   }
   //eliminar
   public async deleteSensor({params, response }: HttpContextContract) {
-    const datos = params.all()
+    
     const preb = (await mongo).model('historialsensores', schHistorial)
     preb
-      .deleteOne({'id': datos.id })
+      .deleteOne({id: params.id })
       .then((data) => {
         return response.finished
         //console.log(data)

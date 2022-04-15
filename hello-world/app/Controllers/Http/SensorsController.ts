@@ -35,10 +35,7 @@ export default class SensorsController {
   //CREAR
   public async crearSensor({ request, response }: HttpContextContract) {
     const datos = request.all()
-    //var preGPIO={datos.GPIO}
-    //fgpio.forEach(element => {
-    //   preGPIO.push(element)
-    //});
+    var preGPIO={datos:datos.GPIO}
     const preb = (await mongo).model('sensores', schSensor)
     let idventa = await this.autoincrement()
     const id = (await idventa) + 1
@@ -49,7 +46,7 @@ export default class SensorsController {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
-        GPIO: datos.GPIO,
+        GPIO: preGPIO.datos,
         IMG: datos.IMG,
         Fechadecreacion: Date.now(),
         Fechadeactualisacion: '',
@@ -65,25 +62,25 @@ export default class SensorsController {
   //mostrar
   public async getSensores({ request, response }: HttpContextContract) {
     let datos = request.all()
-    let resp:any
+    let resp: any
     const preb = (await mongo).model('sensores', schSensor)
     await preb
       .find({ 'idUsuario': datos.idUsuario })
       .then((data) => {
-        resp= data
+        resp = data
       })
       .catch((err) => {
         return err
       })
-      return resp
+    return resp
   }
   //editar
-  public async updateSensores({params,request,response }: HttpContextContract) {
-    const id = params.id
+  public async updateSensores({ params, request, response }: HttpContextContract) {
+
     const datos = request.all()
     const preb = (await mongo).model('sensores', schSensor)
     preb
-      .updateOne({ 'idSensor': id.idSensor }, {
+      .updateOne({ idSensor: params.id }, {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
@@ -100,11 +97,11 @@ export default class SensorsController {
       })
   }
   //eliminar
-  public async deleteSensor({ request,response }: HttpContextContract) {
-    const datos = request.all()
+  public async deleteSensor({ params, request, response }: HttpContextContract) {
+    // const datos = request.all()
     const preb = (await mongo).model('sensores', schSensor)
     preb
-      .deleteOne({ idSensor: datos.idSensor })
+      .deleteOne({ idSensor: params.id })
       .then((data) => {
         return response.finished
         //console.log(data)
@@ -114,10 +111,16 @@ export default class SensorsController {
       })
   }
   //pruebas
-  public async pruebaslista({ request }: HttpContextContract) {
-    const todo = request.all()
-    var s = {}
-    s = todo.GPIO.toJSON()
+  public async pruebaslista() {
+    /*
+    let result = "{hola:1,xd:1}"
+    let pre = []
+    pre.push(result)
+    console.log(pre[0])
+    let s = typeof (pre[0])
     console.log(s)
+    let prer=pre[0].split("}{,:")
+    console.log(prer)
+    */
   }
 }

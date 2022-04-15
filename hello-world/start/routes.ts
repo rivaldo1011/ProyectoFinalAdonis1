@@ -11,7 +11,7 @@ Route.group(() => {
   })
   Route.get('srevisarToken', 'AuthController.VerificarToken')
   Route.get('straerUsuario', 'AuthController.getUser')
-  Route.get('scerrarSesion', 'AuthController.Logout')
+  Route.post('scerrarSesion', 'AuthController.Logout')
   //AUTH-SENSORES 
 
   Route.get('smostrarSensores', 'SensorsController.getSensores')
@@ -22,12 +22,8 @@ Route.group(() => {
   //AUTH-HISTORIAL
   Route.get('smostrarHistorial', 'HistorialsController.getHistorial')
   Route.post('screarHistorial', 'HistorialsController.crearHistorial')
-  Route.post('supdateHistorial/:id', 'HistorialsController.updateHistorial')
-  Route.post('sdeleteHistorial/:id', 'HistorialsController.deleteSensor')
-  //AUTH-Historial
-  Route.get('sConexion', 'HistorialsController.mostrarHistorial')
-  Route.put('sInsertarHistorial', 'HistorialsController.store')
-  Route.get('sMostrarHistorial', 'HistorialsController.mostar')
+  Route.put('supdateHistorial/:id', 'HistorialsController.updateHistorial')
+  Route.delete('sdeleteHistorial/:id', 'HistorialsController.deleteSensor')
 }).middleware('auth')
 
 //LOGIN
@@ -41,9 +37,10 @@ Route.group(() => {
 //HISTORIAL
   Route.get('mostrarHistorial', 'HistorialsController.getHistorial')
   Route.post('crearHistorial', 'HistorialsController.crearHistorial')
-  Route.post('updateHistorial/:id', 'HistorialsController.updateHistorial')
-  Route.post('deleteHistorial/:id', 'HistorialsController.deleteSensor')
+  Route.put('updateHistorial/:id', 'HistorialsController.updateHistorial')
+  Route.delete('deleteHistorial/:id', 'HistorialsController.deleteSensor')
 
 
   
   Route.get('revisarToken', 'AuthController.VerificarToken')
+  Route.get('pruebaslista', 'SensorsController.pruebaslista')
