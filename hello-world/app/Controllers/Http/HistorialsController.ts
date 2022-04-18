@@ -3,19 +3,23 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schHistorial from 'App/Models/Historial'
-
+let URL = Env.get('MONGO_URL')
+let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class HistorialsController {
-  URL = Env.get('MONGO_URL')
+
   public async autoincrement() {
     try {
-      const con = mongoose.createConnection(this.URL)
-      const preb = con.model('historialsensores', schHistorial)
-      let s = await preb.aggregate([{$project: {
-        id: 1,
-        _id: 0
-       }}, {$sort: {
-        id: -1
-       }}, {$limit: 1}])
+      const preb = (await mongo).model('historialsensores', schHistorial)
+      let s = await preb.aggregate([{
+        $project: {
+          id: 1,
+          _id: 0
+        }
+      }, {
+        $sort: {
+          id: -1
+        }
+      }, { $limit: 1 }])
       let res
       s.forEach((element) => {
         res = element.id
@@ -26,11 +30,11 @@ export default class HistorialsController {
     }
   }
   //mostrar
-  public async getHistorial() {
-    const con = mongoose.createConnection(this.URL)
-    const preb = con.model('historialsensores', schHistorial)
+  public async getHistorial({ request }: HttpContextContract) {
+    let datos = request.all()
+    const preb = (await mongo).model('historialsensores', schHistorial)
     const buscar = preb
-      .find({})
+      .find({ 'idUsuario': datos.idUsuario, })
       .then((schHistorial) => {
         return schHistorial
       })
@@ -40,11 +44,10 @@ export default class HistorialsController {
     return buscar
   }
   //CREAR
-  public async Historial({ request }: HttpContextContract) {
+  public async crearHistorial({ request }: HttpContextContract) {
     const datos = request.all()
     let preValor: Object = datos.Valor
-    const con = mongoose.createConnection(this.URL)
-    const preb = con.model('historialsensores', schHistorial)
+    const preb = (await mongo).model('historialsensores', schHistorial)
     let idd = await this.autoincrement()
     const id = (await idd) + 1
     preb
@@ -56,34 +59,44 @@ export default class HistorialsController {
         Fechadeactualizacion: ''
       })
       .then((data) => {
-        console.log(data)
+        return data
       })
       .catch((err) => {
         console.log(err)
       })
   }
   //editar
-  public async updateHistorial({ request }: HttpContextContract) {
+  public async updateHistorial({ params,request,response }: HttpContextContract) {
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
     //let date = new Date()
     //let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
-    const preb = con.model('historialsensores', schHistorial)
+    const preb = (await mongo).model('historialsensores', schHistorial)
+    
     preb
-      .updateOne({
-        id: datos.id,
+      .updateOne({ id: params.id }, {
         idSensor: datos.idSensor,
-        Valor: datos.valor,
-        Fechadecreacion: Date.now(),
-        Fechadeactualizacion: ''
+        Valor: datos.Valor,
+        Fechadeactualizacion: Date.now()
       })
       .then((data) => {
-        console.log(data)
+        return response.finished
       })
       .catch((err) => {
         console.log(err)
+      })
+  }
+  //eliminar
+  public async deleteSensor({params, response }: HttpContextContract) {
+    
+    const preb = (await mongo).model('historialsensores', schHistorial)
+    preb
+      .deleteOne({id: params.id })
+      .then((data) => {
+        return response.finished
+        //console.log(data)
+      })
+      .catch((err) => {
+        return err
       })
   }
 }

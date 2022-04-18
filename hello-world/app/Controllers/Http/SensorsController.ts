@@ -2,14 +2,14 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import schSensor from 'App/Models/Sensor'
-import { DateTime, Zone } from 'luxon'
+//import { DateTime, Zone } from 'luxon'
+let URL = Env.get('MONGO_URL');
+let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
-  URL = Env.get('MONGO_URL')
   //EXTRAS
   public async autoincrement() {
     try {
-      const con = mongoose.createConnection(this.URL)
-      const preb = con.model('sensores', schSensor)
+      const preb = (await mongo).model('sensores', schSensor)
       let s = await preb.aggregate([
         {
           $project: {
@@ -33,17 +33,9 @@ export default class SensorsController {
     }
   }
   //CREAR
-  public async crearSensor({ request }: HttpContextContract) {
+  public async crearSensor({ request, response }: HttpContextContract) {
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
-    //var preGPIO={datos.GPIO}
-    //fgpio.forEach(element => {
-    //   preGPIO.push(element)
-    //});
-
-    const preb = con.model('sensores', schSensor)
+    const preb = (await mongo).model('sensores', schSensor)
     let idventa = await this.autoincrement()
     const id = (await idventa) + 1
     preb
@@ -59,39 +51,35 @@ export default class SensorsController {
         Fechadeactualisacion: '',
       })
       .then((data) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    return { hola: 'xd' }
-  }
-  //mostrar
-  public async getSensores({response}:HttpContextContract) {
-    const con = mongoose.createConnection(this.URL)
-    const preb = con.model('sensores', schSensor)
-    await preb
-      .find({})
-      .then((data) => {
-        response =data
+        return response.created
+        //console.log(data)
       })
       .catch((err) => {
         return err
       })
-    return response
+  }
+  //mostrar
+  public async getSensores({ request, response }: HttpContextContract) {
+    let datos = request.all()
+    let resp: any
+    const preb = (await mongo).model('sensores', schSensor)
+    await preb
+      .find({ 'idUsuario': datos.idUsuario })
+      .then((data) => {
+        resp = data
+      })
+      .catch((err) => {
+        return err
+      })
+    return resp
   }
   //editar
-  public async updateSensores({ request }: HttpContextContract) {
+  public async updateSensores({ params, request, response }: HttpContextContract) {
+
     const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
-    let date = new Date()
-    let [month, day, year] = [date.getMonth(), date.getDate(), date.getFullYear()]
-    const preb = con.model('sensores', schSensor)
+    const preb = (await mongo).model('sensores', schSensor)
     preb
-      .updateOne({ idSensor: datos.idSensor }, {
-        idUsuario: datos.idUsuario,
+      .updateOne({ idSensor: params.id }, {
         NombreSensor: datos.NombreSensor,
         Descripcion: datos.Descripcion,
         Estado: datos.Estado,
@@ -100,33 +88,38 @@ export default class SensorsController {
         Fechadeactualisacion: Date.now(),
       })
       .then((data) => {
-        console.log(data)
+        //console.log(data)
+        return response.ok
       })
       .catch((err) => {
-        console.log(err)
+        return err
       })
   }
   //eliminar
-  public async deleteSensor({ request }: HttpContextContract) {
-    const datos = request.all()
-    const con = mongoose.createConnection(this.URL, {
-      maxIdleTimeMS: 6000,
-    })
-    const preb = con.model('sensores', schSensor)
+  public async deleteSensor({ params, request, response }: HttpContextContract) {
+    // const datos = request.all()
+    const preb = (await mongo).model('sensores', schSensor)
     preb
-      .deleteOne({ idSensor: datos.idSensor })
+      .deleteOne({ idSensor: params.id })
       .then((data) => {
-        console.log(data)
+        return response.finished
+        //console.log(data)
       })
       .catch((err) => {
-        console.log(err)
+        return err
       })
   }
   //pruebas
-  public async pruebaslista({ request }: HttpContextContract) {
-    const todo = request.all()
-    var s = {}
-    s = todo.GPIO.toJSON()
+  public async pruebaslista() {
+    /*
+    let result = "{hola:1,xd:1}"
+    let pre = []
+    pre.push(result)
+    console.log(pre[0])
+    let s = typeof (pre[0])
     console.log(s)
+    let prer=pre[0].split("}{,:")
+    console.log(prer)
+    */
   }
 }

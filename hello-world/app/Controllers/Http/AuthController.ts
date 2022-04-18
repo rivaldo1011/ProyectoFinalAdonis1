@@ -22,7 +22,7 @@ export default class AuthController {
     })
     const data = await request.validate({ schema: validations })
     const user = await auth.create(data)
-    return response.created(user)
+    return response.created("usuario creado")
   }
   public async Logout({ auth, response }) {
     try {
