@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
-import schSensor from 'App/Models/Sensor'
+import SensorM from 'App/Models/Sensor'
 //import { DateTime, Zone } from 'luxon'
 let URL = Env.get('MONGO_URL');
 let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
@@ -33,7 +33,22 @@ export default class SensorsController {
     }
   }
   //CREAR
-  public async crearSensor({ request, response }: HttpContextContract) {
+  public async crearSensor({ request, response }) {
+    await mongoose.connect(URL) 
+      response=new SensorM.SensorM({
+        idSensor: request.input('id'),
+        idUsuario: request.input('idUsuario'),
+        NombreSensor: request.input('NombreSensor'),
+        Descripcion: request.input('Descripcion'),
+        Estado: request.input('Estado'),
+        GPIO: request.input('GPIO'),
+        IMG: request.input('IMG'),
+        Fechadecreacion: Date.now(),
+        Fechadeactualisacion: '',
+     })
+     response.save()
+     return response
+    /*
     const datos = request.all()
     const preb = (await mongo).model('sensores', schSensor)
     let idventa = await this.autoincrement()
@@ -57,6 +72,7 @@ export default class SensorsController {
       .catch((err) => {
         return err
       })
+      */
   }
   //mostrar
   public async getSensores({ request, response }: HttpContextContract) {

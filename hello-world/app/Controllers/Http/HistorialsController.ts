@@ -46,7 +46,6 @@ export default class HistorialsController {
   //CREAR
   public async crearHistorial({ request }: HttpContextContract) {
     const datos = request.all()
-    let preValor: Object = datos.Valor
     const preb = (await mongo).model('historialsensores', schHistorial)
     let idd = await this.autoincrement()
     const id = (await idd) + 1
@@ -54,11 +53,12 @@ export default class HistorialsController {
       .insertMany({
         id: id,
         idSensor: datos.idsensor,
-        Valor: preValor,
+        Valor: datos.Valor,
         Fechadecreacion: Date.now(),
         Fechadeactualizacion: ''
       })
       .then((data) => {
+        console.log(data)
         return data
       })
       .catch((err) => {
