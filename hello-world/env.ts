@@ -21,5 +21,7 @@ export default Env.rules({
   APP_NAME: Env.schema.string(),
   DRIVE_DISK: Env.schema.enum(['local'] as const),
   NODE_ENV: Env.schema.enum(['development', 'production', 'testing'] as const),
-  MONGO_URL:Env.schema.string()
+  MONGO_URL:Env.schema.string(),
+  MONGO_URL2:Env.schema.string(),
+  sMONGO_URL:Env.schema.string(),
 })

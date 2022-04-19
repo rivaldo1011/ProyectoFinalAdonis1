@@ -1,17 +1,14 @@
 import { DateTime } from 'luxon';
 import {Schema,model} from 'mongoose'
-export default class SensorM{
-  static  schSensor=new Schema({
-    idSensor: Number,
-    Nombre: String,
-    Descripcion:String,
-    IMG:String,
-    Fechadecreacion: Date,
-    Fechadeactualizacio: Date
+export default class SensorUsuarioM{
+  static  schSensorUsuario=new Schema({
+    idRU: Number,
+  idUsuario: Number,
+  idSensor: Number
 },{
   versionKey:false
 });
-static SensorM:any=model('sensores',this.schSensor);
+static SensorUsuarioM:any=model('sensoresusuarios',this.schSensorUsuario);
 }
   /*
   self.idSensor = 0

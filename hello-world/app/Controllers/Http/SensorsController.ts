@@ -3,7 +3,7 @@ import Env from '@ioc:Adonis/Core/Env'
 import mongoose from 'mongoose'
 import SensorM from 'App/Models/Sensor'
 //import { DateTime, Zone } from 'luxon'
-let URL = Env.get('MONGO_URL');
+let URL = Env.get('MONGO_URL2');
 let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
   //EXTRAS
@@ -37,8 +37,9 @@ export default class SensorsController {
     await mongoose.connect(URL) 
     let autoinc=this.autoincrementSEN()
     let id=await autoinc+1
+    if (id=="NaN" || id==null){id+=1};
       response=new SensorM.SensorM({
-        idSensor: id,
+        idSensor: 1,
         idUsuario: request.input('idUsuario'),
         NombreSensor: request.input('NombreSensor'),
         Descripcion: request.input('Descripcion'),
@@ -107,7 +108,7 @@ export default class SensorsController {
   //eliminar
   public async deleteSensor({ params, request, response }: HttpContextContract) {
     // const datos = request.all()
-    const preb = (await mongo).model('sensores', schSensor)
+    const preb = SensorM.SensorM
     preb
       .deleteOne({ idSensor: params.id })
       .then((data) => {
