@@ -34,13 +34,14 @@ Route.group(() => {
   Route.post('crearSensores', 'SensorsController.crearSensor')
   Route.put('updateSensores/:id', 'SensorsController.updateSensores')
   Route.delete('eliminarSensores/:id', 'SensorsController.deleteSensor')
+  Route.get('Sensoresincrement', 'SensorsController.autoincrementSEN')
 //HISTORIAL
   Route.get('mostrarHistorial', 'HistorialsController.getHistorial')
   Route.post('crearHistorial', 'HistorialsController.crearHistorial')
   Route.put('updateHistorial/:id', 'HistorialsController.updateHistorial')
   Route.delete('deleteHistorial/:id', 'HistorialsController.deleteSensor')
 
-
+  
   
   Route.get('revisarToken', 'AuthController.VerificarToken')
   Route.get('pruebaslista', 'SensorsController.pruebaslista')

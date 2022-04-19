@@ -7,9 +7,9 @@ let URL = Env.get('MONGO_URL');
 let mongo = mongoose.connect(URL, { maxIdleTimeMS: 1000 });
 export default class SensorsController {
   //EXTRAS
-  public async autoincrement() {
+  public async autoincrementSEN() {
     try {
-      const preb = (await mongo).model('sensores', schSensor)
+      const preb = SensorM.SensorM
       let s = await preb.aggregate([
         {
           $project: {
@@ -35,8 +35,10 @@ export default class SensorsController {
   //CREAR
   public async crearSensor({ request, response }) {
     await mongoose.connect(URL) 
+    let autoinc=this.autoincrementSEN()
+    let id=await autoinc+1
       response=new SensorM.SensorM({
-        idSensor: request.input('id'),
+        idSensor: id,
         idUsuario: request.input('idUsuario'),
         NombreSensor: request.input('NombreSensor'),
         Descripcion: request.input('Descripcion'),
@@ -76,24 +78,15 @@ export default class SensorsController {
   }
   //mostrar
   public async getSensores({ request, response }: HttpContextContract) {
-    let datos = request.all()
-    let resp: any
-    const preb = (await mongo).model('sensores', schSensor)
-    await preb
-      .find({ 'idUsuario': datos.idUsuario })
-      .then((data) => {
-        resp = data
-      })
-      .catch((err) => {
-        return err
-      })
-    return resp
+    //poner filtro para usuario logueado
+    response=await  SensorM.SensorM.find({})
+    return response
   }
   //editar
   public async updateSensores({ params, request, response }: HttpContextContract) {
 
     const datos = request.all()
-    const preb = (await mongo).model('sensores', schSensor)
+    const preb = SensorM.SensorM
     preb
       .updateOne({ idSensor: params.id }, {
         NombreSensor: datos.NombreSensor,
