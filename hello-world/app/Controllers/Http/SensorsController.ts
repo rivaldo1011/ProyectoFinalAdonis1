@@ -34,21 +34,12 @@ export default class SensorsController {
   }
   //CREAR
   public async crearSensor({ request, response }) {
+    let datos=request.all()
     await mongoose.connect(URL) 
     let autoinc=this.autoincrementSEN()
     let id=await autoinc+1
     if (id=="NaN" || id==null){id+=1};
-      response=new SensorM.SensorM({
-        idSensor: 1,
-        idUsuario: request.input('idUsuario'),
-        NombreSensor: request.input('NombreSensor'),
-        Descripcion: request.input('Descripcion'),
-        Estado: request.input('Estado'),
-        GPIO: request.input('GPIO'),
-        IMG: request.input('IMG'),
-        Fechadecreacion: Date.now(),
-        Fechadeactualisacion: '',
-     })
+      response=new SensorM.SensorM({datos})
      response.save()
      return response
     /*
@@ -89,14 +80,7 @@ export default class SensorsController {
     const datos = request.all()
     const preb = SensorM.SensorM
     preb
-      .updateOne({ idSensor: params.id }, {
-        NombreSensor: datos.NombreSensor,
-        Descripcion: datos.Descripcion,
-        Estado: datos.Estado,
-        GPIO: datos.GPIO,
-        IMG: datos.IMG,
-        Fechadeactualisacion: Date.now(),
-      })
+      .updateOne({ idSensor: params.id }, {datos})
       .then((data) => {
         //console.log(data)
         return response.ok
