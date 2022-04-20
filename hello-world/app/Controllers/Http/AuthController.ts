@@ -12,17 +12,23 @@ export default class AuthController {
     return token.toJSON()
   }
   public async register({ request, response }: HttpContextContract) {
-    const validations = await schema.create({
-      email: schema.string({}, [rules.email(), rules.unique({ table: 'auths', column: 'email' })]),
-      username: schema.string({ trim: true }, [
-        rules.unique({ table: 'auths', column: 'username', caseInsensitive: true }),
-      ]),
-      tipo_usuario: schema.number(),
-      password: schema.string({}, [rules.minLength(8)]),
-    })
-    const data = await request.validate({ schema: validations })
-    const user = await auth.create(data)
-    return response.created("usuario creado")
+    try {
+      const validations = await schema.create({
+        email: schema.string({}, [rules.email(), rules.unique({ table: 'auths', column: 'email' })]),
+  
+        username: schema.string({ trim: true }, [
+          rules.unique({ table: 'auths', column: 'username', caseInsensitive: true }),
+        ]),
+        tipo_usuario: schema.number(),
+        password: schema.string({}, [rules.minLength(8)]),
+      })
+      const data = await request.validate({ schema: validations })
+      const user = await auth.create(data)
+      return response.created(user)
+    } catch (error) {
+      console.log(error)
+      return error
+    }
   }
   public async Logout({ auth, response }) {
     try {
